@@ -1,3 +1,5 @@
+#include<ostream> 
+
 class Quaternion {
         float re, i, j, k;
     public:
@@ -51,13 +53,13 @@ class Quaternion {
               
         */
 
-        bool operator==(const Quaternion& one, const Quaternion& two);
+        bool operator==(const Quaternion& other) const;
         /*
         bool MyClass::operator==(const MyClass &other) const;
         */
-        bool operator!=(const Quaternion& one, const Quaternion& two);
+        bool operator!=(const Quaternion& other) const;
 
-        friend ostream& operator<<(ostream& out, const Quaternion& q);
+        friend std::ostream& operator<<(std::ostream& out, const Quaternion& q);
 
         // setters getters
         float R();
@@ -68,7 +70,7 @@ class Quaternion {
         Quaternion conj(Quaternion q);
         float norm();
         // (norma a + bi + cj + dk to sqrt(a*a + b*b + c*c + d*d));
-}
+};
 
 
 /* 

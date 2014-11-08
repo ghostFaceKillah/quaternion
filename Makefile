@@ -17,4 +17,4 @@ test: private/test.cc
 .PHONY: clean
 
 clean:
-	rm *.o
+	rm *.o *.gch
