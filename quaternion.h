@@ -20,11 +20,41 @@ class Quaternion {
         Quaternion& operator*=(const Quaternion& param);
 
         Quaternion operator+ (const Quaternion& param);
+        /*
+        const MyClass MyClass::operator+(const MyClass &other) const {
+            MyClass result = *this;     // Make a copy of myself.  Same as MyClass result(*this);
+            result += other;            // Use += to add other to the copy.
+            return result;              // All done!
+        }
+        const MyClass MyClass::operator+(const MyClass &other) const {
+            return MyClass(*this) += other;
+        }
+        */
+
         Quaternion operator- (const Quaternion& param);
         Quaternion operator* (const Quaternion& param);
         Quaternion operator= (const Quaternion& param);
+        /*
+        MyClass& MyClass::operator=(const MyClass &rhs) {
+            // 1.  Deallocate any memory that MyClass is using internally
+            // 2.  Allocate some memory to hold the contents of rhs
+            // 3.  Copy the values from rhs into this instance
+            // 4.  Return *this
+        } 
+          MyClass& MyClass::operator=(const MyClass &rhs) {
+              // Check for self-assignment!
+              if (this == &rhs)      // Same object?
+                return *this;        // Yes, so skip assignment, and just return *this.
+              // ... // Deallocate, allocate new space, copy values...
+              return *this;
+        }
+              
+        */
 
         bool operator==(const Quaternion& one, const Quaternion& two);
+        /*
+        bool MyClass::operator==(const MyClass &other) const;
+        */
         bool operator!=(const Quaternion& one, const Quaternion& two);
 
         friend ostream& operator<<(ostream& out, const Quaternion& q);
