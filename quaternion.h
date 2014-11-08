@@ -1,40 +1,47 @@
-class Quaterion {
+class Quaternion {
+        float re, i, j, k;
     public:
+        // constructors
         Quaternion();
         Quaternion(float re);
         Quaternion(float re, float im);
         Quaternion(float a, float b, float c, float d);
-        Quaternion(Quaternion s1); 
-        // operators
-    private:
-        float re, i, j, k;
+        Quaternion(Quaternion& s1); 
+        // we need to look into how copying constructor is made
+        //  Quaternion q2(q1) - tworzy kopię kwaternionu q1;
+        //  Quaternion q2 = q1 - tworzy kopię kwaternionu q1;
 
+        // operators
+        Quaternion operator+ ();
+        Quaternion operator- ();
+
+        Quaternion& operator+=(const Quaternion& param);
+        Quaternion& operator-=(const Quaternion& param);
+        Quaternion& operator*=(const Quaternion& param);
+
+        Quaternion operator+ (const Quaternion& param);
+        Quaternion operator- (const Quaternion& param);
+        Quaternion operator* (const Quaternion& param);
+        Quaternion operator= (const Quaternion& param);
+
+        bool operator==(const Quaternion& one, const Quaternion& two);
+        bool operator!=(const Quaternion& one, const Quaternion& two);
+
+        friend ostream& operator<<(ostream& out, const Quaternion& q);
+
+        // setters getters
+        float R();
+        float I();
+        float J();
+        float K();
+        Quaternion conj();
+        Quaternion conj(Quaternion q);
+        float norm();
+        // (norma a + bi + cj + dk to sqrt(a*a + b*b + c*c + d*d));
 }
 
 
 /* 
-* Quaternion q2(q1) - tworzy kopię kwaternionu q1;
-* Quaternion q2 = q1 - tworzy kopię kwaternionu q1;
-* q2 = q1 - przypisuje kwaternion q1 na zmienną q2;
-
-* q.R() - zwraca pierwszą współrzędną kwaternionu q;
-* q.I() - zwraca drugą współrzędną kwaternionu q;
-* q.J() - zwraca trzecią współrzędną kwaternionu q;
-* q.K() - zwraca czwartą współrzędną kwaternionu q;
-* q.conj(), conj(q) - zwraca kwaternion sprzężony (część rzeczywista
-                                                   taka sama, część nierzeczywista z przeciwnymi znakami);
-* q.norm(), norm(q) - zwraca normę kwaternionu q
-(norma a + bi + cj + dk to sqrt(a*a + b*b + c*c + d*d));
-* -q - zwraca kwaternion przeciwny do kwaternionu q;
-* +q - zwraca kwaternion równy kwaternionowi q;
-* q1 += q2 - dodaje do kwaternionu q1 kwaternion q2;
-* q1 + q2 - zwraca kwaternion będący sumą kwaternionów q1 i q2;
-* q1 -= q2 - odejmuje od kwaternionu q1 kwaternion q2;
-* q1 - q2 - zwraca kwaternion będący różnicą kwaternionów q1 i q2;
-* q1 *= q2 - mnoży kwaternion q1 przez kwaternion q2;
-* q1 * q2 - zwraca kwaternion będący iloczynem kwaternionów q1 i q2;
-* q1 == q2 - zwraca true, wtw. gdy kwaterniony q1 i q2 są równe;
-* q1 != q2 - zwraca true, wtw. gdy kwaterniony q1 i q2 są różne;
 * if(q), while(q) - warunek jest spełniony, gdy kwaternion nie jest
 równy zeru;
 * os << q - wypisuje kwaternion q na strumień os;
@@ -45,10 +52,8 @@ równy zeru;
 Do reprezentacji składowych kwaternionu można użyć typu double.
 
 = Klasa QuaternionSequence =
-
 Klasa ta powinna implementować ciągi kwaternionów prawie wszędzie
 równe zeru. Powinny być dostępne następujące instrukcje:
-
 * QuaternionSequence qs - tworzy ciąg kwaternionów wszędzie równy zeru;
 * QuaternionSequence qs(m) - tworzy ciąg kwaternionów na podstawie mapy m,
 która jest typu std::map<QuaternionSequence::size_type, Quaternion>,

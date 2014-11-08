@@ -1,23 +1,18 @@
-CC = gcc
-RELEASE_FLAGS = -Wall -O2 -std=c++11 -c
-DEBUG_FLAGS = -g -D_DEBUG -Wall -std=c++11 -c
-SOURCES = strset.cc strsetconst.cc
-DEPS = strset.h strsetconst.h
+CC = g++
+CXXFLAGS = -Wall -O2 -std=c++11 -c
+SOURCES = quaternion.cpp
+DEPS = quaternion.h
 OBJECTS = $(SOURCES:.cc=.o)
-
-ifeq ($(debuglevel), 1)
-    CXXFLAGS = $(DEBUG_FLAGS)
-else
-    CXXFLAGS = $(RELEASE_FLAGS)
-endif
 
 all: $(SOURCES) $(OBJECTS)
 
-strset.o: strset.cc $(DEPS)
+$(OBJECTS): $(SOURCES) $(DEPS)
 	$(CC) $(CXXFLAGS) $<
 
-strsetconst.o: strsetconst.cc $(DEPS)
+test: private/test.cc
 	$(CC) $(CXXFLAGS) $<
+
+
 
 .PHONY: clean
 
