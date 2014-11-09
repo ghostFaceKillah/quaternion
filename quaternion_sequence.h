@@ -1,4 +1,4 @@
-#include<ostream> 
+#include <ostream> 
 
 class Quaternion {
         float re, i, j, k;

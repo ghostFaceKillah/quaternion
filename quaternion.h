@@ -1,4 +1,4 @@
-#include<ostream> 
+#include <ostream> 
 
 class Quaternion {
         float re, i, j, k;
@@ -8,7 +8,7 @@ class Quaternion {
         Quaternion(float re);
         Quaternion(float re, float im);
         Quaternion(float a, float b, float c, float d);
-        Quaternion(Quaternion& s1); 
+        Quaternion(const Quaternion& q); 
         // we need to look into how copying constructor is made
         //  Quaternion q2(q1) - tworzy kopię kwaternionu q1;
         //  Quaternion q2 = q1 - tworzy kopię kwaternionu q1;
@@ -35,7 +35,7 @@ class Quaternion {
 
         Quaternion operator- (const Quaternion& param);
         Quaternion operator* (const Quaternion& param);
-        Quaternion operator= (const Quaternion& param);
+        Quaternion& operator= (const Quaternion& param);//dopisałam &, dlaczego bez?
         /*
         MyClass& MyClass::operator=(const MyClass &rhs) {
             // 1.  Deallocate any memory that MyClass is using internally
