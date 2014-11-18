@@ -1,87 +1,44 @@
 #include <ostream> 
+#include <map>
+#include <vector>
+#include "quaternion.h"
 
-class Quaternion {
-        float re, i, j, k;
+class QuaternionSequence {
+	typedef int size_type;
+	private:
+		std::map<size_type, Quaternion> quaternions;
+	
     public:
-        // constructors
-        Quaternion();
-        Quaternion(float re);
-        Quaternion(float re, float im);
-        Quaternion(float a, float b, float c, float d);
-        Quaternion(Quaternion& s1); 
-        // we need to look into how copying constructor is made
-        //  Quaternion q2(q1) - tworzy kopię kwaternionu q1;
-        //  Quaternion q2 = q1 - tworzy kopię kwaternionu q1;
+        QuaternionSequence();
+        QuaternionSequence(std::map<size_type, Quaternion>&& q_map);
+        QuaternionSequence(std::vector<Quaternion>&& q_vector);
 
-        // operators
-        Quaternion operator+ ();
-        Quaternion operator- ();
+        QuaternionSequence(const QuaternionSequence& qs);
+        QuaternionSequence(QuaternionSequence&& qs); 
+        
+        QuaternionSequence& operator= (const QuaternionSequence& qs);
+        QuaternionSequence& operator= (QuaternionSequence&& qs);
 
-        Quaternion& operator+=(const Quaternion& param);
-        Quaternion& operator-=(const Quaternion& param);
-        Quaternion& operator*=(const Quaternion& param);
-
-        Quaternion operator+ (const Quaternion& param);
-        /*
-        const MyClass MyClass::operator+(const MyClass &other) const {
-            MyClass result = *this;     // Make a copy of myself.  Same as MyClass result(*this);
-            result += other;            // Use += to add other to the copy.
-            return result;              // All done!
-        }
-        const MyClass MyClass::operator+(const MyClass &other) const {
-            return MyClass(*this) += other;
-        }
-        */
-
-        Quaternion operator- (const Quaternion& param);
-        Quaternion operator* (const Quaternion& param);
-        Quaternion operator= (const Quaternion& param);
-        /*
-        MyClass& MyClass::operator=(const MyClass &rhs) {
-            // 1.  Deallocate any memory that MyClass is using internally
-            // 2.  Allocate some memory to hold the contents of rhs
-            // 3.  Copy the values from rhs into this instance
-            // 4.  Return *this
-        } 
-          MyClass& MyClass::operator=(const MyClass &rhs) {
-              // Check for self-assignment!
-              if (this == &rhs)      // Same object?
-                return *this;        // Yes, so skip assignment, and just return *this.
-              // ... // Deallocate, allocate new space, copy values...
-              return *this;
-        }
-              
-        */
-
-        bool operator==(const Quaternion& other) const;
-        /*
-        bool MyClass::operator==(const MyClass &other) const;
-        */
-        bool operator!=(const Quaternion& other) const;
-
-        friend std::ostream& operator<<(std::ostream& out, const Quaternion& q);
-
-        // setters getters
-        float R();
-        float I();
-        float J();
-        float K();
-        Quaternion conj();
-        Quaternion conj(Quaternion q);
-        float norm();
-        // (norma a + bi + cj + dk to sqrt(a*a + b*b + c*c + d*d));
+		QuaternionSequence& operator+=(const QuaternionSequence& qs);
+		QuaternionSequence operator+ (const QuaternionSequence& qs);
+		QuaternionSequence& operator-=(const QuaternionSequence& qs);
+		QuaternionSequence operator- (const QuaternionSequence& qs);
+		QuaternionSequence& operator*=(const Quaternion& q);
+		/*do przemyślenia*/
+		friend QuaternionSequence operator* (const Quaternion& q, const QuaternionSequence& qs);
+		//Quaternion qs[QuaternionSequence::size_type];
+		void insert(int n, const Quaternion& q);
+		bool operator==(const QuaternionSequence& qs) const;
+        bool operator!=(const QuaternionSequence& qs) const;
+		explicit operator bool() const;
+		friend std::ostream& operator<<(std::ostream& out, const QuaternionSequence& qs);
 };
-
+int count();
 
 /* 
-* if(q), while(q) - warunek jest spełniony, gdy kwaternion nie jest
-równy zeru;
-* os << q - wypisuje kwaternion q na strumień os;
 * I - globalny niemodyfikowalny obiekt reprezentujący kwaternion (0, 1, 0, 0);
 * J - globalny niemodyfikowalny obiekt reprezentujący kwaternion (0, 0, 1, 0);
 * K - globalny niemodyfikowalny obiekt reprezentujący kwaternion (0, 0, 0, 1).
-
-Do reprezentacji składowych kwaternionu można użyć typu double.
 
 = Klasa QuaternionSequence =
 Klasa ta powinna implementować ciągi kwaternionów prawie wszędzie
@@ -105,7 +62,7 @@ różnicami wyrazów z ciągów qs1 i qs2;
 * qs * q, q * qs - zwraca ciąg kwaternionów, którego kolejne wyrazy są
 wyrazami ciągu qs pomnożonymi przez kwaternion q;
 * qs[n] - zwraca kwaternion będący n-tym wyrazem ciągu qs (nie
-                                                           oznacza to możliwości przypisania qs[n] = ...);
+  oznacza to możliwości przypisania qs[n] = ...);
 * insert(n, q) - wstawia kwaternion q na pozycję n;
 * qs1 == qs2 - zwraca true, wtw. gdy ciągi qs1 i qs2 są równe,
 tzn. mają równe kolejne wyrazy;

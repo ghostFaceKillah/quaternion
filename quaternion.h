@@ -5,6 +5,7 @@ class Quaternion {
     public:
         // constructors
         Quaternion();
+        /* pozwala na niejawne rzutowanie */
         Quaternion(double re);
         Quaternion(double re, double im);
         Quaternion(double a, double b, double c, double d);
@@ -14,16 +15,22 @@ class Quaternion {
         // operators
         Quaternion operator+ ();
         Quaternion operator- ();
+		friend Quaternion operator+(double x, const Quaternion& q);
+		//friend Quaternion operator+(const Quaternion& q, double x);
+		friend Quaternion operator-(double x, const Quaternion& q);
+		//friend Quaternion operator-(const Quaternion& q, double x);
 
         // consider adding static designator to following operators
         Quaternion& operator+=(const Quaternion& param);
         Quaternion& operator-=(const Quaternion& param);
         Quaternion& operator*=(const Quaternion& param);
+        //friend Quaternion operator*=(const Quaternion& q1, const Quaternion& q2);
         Quaternion operator+ (const Quaternion& param);
         Quaternion operator- (const Quaternion& param);
         Quaternion operator* (const Quaternion& param);
         Quaternion& operator= (const Quaternion& param);
         Quaternion& operator= (Quaternion&& param);
+        //Quaternion& Quaternion::operator= (double x);
         bool operator==(const Quaternion& other) const;
         bool operator!=(const Quaternion& other) const;
 
@@ -36,12 +43,16 @@ class Quaternion {
         double K() const;
         double norm() const;
         Quaternion conj();
+        explicit operator bool() const;
         // (norma a + bi + cj + dk to sqrt(a*a + b*b + c*c + d*d));
 };
 
 double norm(const Quaternion& q);
 Quaternion conj(const Quaternion& q);
 
+extern Quaternion const I;
+extern Quaternion const J;
+extern Quaternion const K;
 
 /* 
 * if(q), while(q) - warunek jest spełniony, gdy kwaternion nie jest

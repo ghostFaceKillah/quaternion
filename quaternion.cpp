@@ -17,7 +17,7 @@ Quaternion::Quaternion(double r, double im) : re(r), i(im) {
 Quaternion::Quaternion(double a, double b, double c, double d) : 
     re(a), i(b), j(c), k(d) {};
 
- Quaternion::Quaternion(const Quaternion& q2) = default;
+Quaternion::Quaternion(const Quaternion& q2) = default;
  
 Quaternion::Quaternion(Quaternion&& q) = default;
 
@@ -30,6 +30,16 @@ Quaternion Quaternion::operator+ () {
 	return result;
 }
 
+Quaternion operator+(double x, const Quaternion& q) {
+	Quaternion tmp(x + q.re, q.i, q.j, q.k);
+	return tmp;
+}
+
+/*Quaternion operator+(const Quaternion& q, double x) {
+	Quaternion tmp(x + q.re, q.i, q.j, q.k);
+	return tmp;
+}*/
+
 Quaternion Quaternion::operator- () {
 	Quaternion result = *this;
 	result.re *= -1;
@@ -38,6 +48,16 @@ Quaternion Quaternion::operator- () {
 	result.k *= -1;
 	return result;
 }
+
+Quaternion operator-(double x, const Quaternion& q) {
+	Quaternion tmp(x - q.re, q.i, q.j, q.k);
+	return tmp;
+}
+
+/*Quaternion operator-(const Quaternion& q, double x) {
+	Quaternion tmp(x - q.re, q.i, q.j, q.k);
+	return tmp;
+}*/
 
 Quaternion& Quaternion::operator+=(const Quaternion& param) {
 	re += param.re;
@@ -60,19 +80,19 @@ Quaternion& Quaternion::operator*=(const Quaternion& param) {
 	k = re * param.k + i * param.j - j * param.i + k * param.re;
 	return *this;
 }
+
+/*Quaternion operator*=(const Quaternion& q1, const Quaternion& q2) {
+	double re = q1.re * q2.re - q1.i * q2.i - q1.j * q2.j - q1.k * q2.k;
+	double i = q1.re * q2.i + q1.i * q2.re + q1.j * q2.k - q1.k * q2.j;
+	double j = q1.re * q2.j - q1.i * q2.k + q1.j * q2.re + q1.k * q2.i;
+	double k = q1.re * q2.k + q1.i * q2.j - q1.j * q2.i + q1.k * q2.re;
+	Quaternion tmp(re, i, j, k);
+	return tmp;
+}*/
+
 Quaternion Quaternion::operator+ (const Quaternion& param) {
 	return (*this) += param;
 }
-/*
-const MyClass MyClass::operator+(const MyClass &other) const {
-	MyClass result = *this;     // Make a copy of myself.  Same as MyClass result(*this);
-	result += other;            // Use += to add other to the copy.
-	return result;              // All done!
-}
-const MyClass MyClass::operator+(const MyClass &other) const {
-	return MyClass(*this) += other;
-}
-*/
 
 Quaternion Quaternion::operator- (const Quaternion& param) {
 	Quaternion result = *this;
@@ -90,16 +110,25 @@ Quaternion Quaternion::operator* (const Quaternion& param) {
 bool Quaternion::operator==(const Quaternion& q) const {
 	return ((re == q.re) && (i == q.i) && (j == q.j) && (k == q.k));
 }
-/*
-bool MyClass::operator==(const MyClass &other) const;
-*/
+
 bool Quaternion::operator!=(const Quaternion& q) const {
 	return !(*this == q);
 }
 
+Quaternion::operator bool() const {
+	return !((re == 0) && (i == 0) && (j == 0) && (k == 0));
+}
+
 std::ostream& operator<<(std::ostream& os, const Quaternion& q) {
-	os << q.re << " + " << q.i << "i + " << q.j << "j + " << q.k <<
-            "k + " << std::endl;
+	if (!q) {
+		os << q.re;
+		if (q.i > 0) { os << "+"; }
+		if (q.i != 0) { os << q.i << "i"; }
+		if (q.j > 0) { os << "+"; }
+		if (q.j != 0) { os << q.j << "j"; }
+		if (q.k > 0) { os << "+"; }
+		if (q.k != 0) { os << q.k << "k"; }
+	} else { os << "0" << std::endl; }
 	return os;
 }
 
@@ -140,3 +169,11 @@ double norm(const Quaternion& q) {
     return q.norm();
 }
 
+Quaternion const I = Quaternion(0., 1., 0., 0.);
+Quaternion const J = Quaternion(0., 0., 1., 0.);
+Quaternion const K = Quaternion(0., 0., 0., 1.);
+/* Z constami potrzeba głębszej rokminy, bo trzeba ogarnąć czy 
+ * inaczej napisać operatory, czy jakieś specjalne dla tych stałych 
+ * stworzyć, bo zapis I * I (i inne działania) powinien chyba zwracać 
+ * nowy Quaternion 
+ */
