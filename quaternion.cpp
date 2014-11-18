@@ -1,34 +1,29 @@
 #include <iostream>
 #include "quaternion.h"
+#include <cmath>
 
 Quaternion::Quaternion() {
     re = i = j = k = 0;
 }
 
-Quaternion::Quaternion(float r) : re(r) {
+Quaternion::Quaternion(double r) : re(r) {
     i = j = k = 0;
 }
 
-Quaternion::Quaternion(float r, float im) : re(r), i(im) {
+Quaternion::Quaternion(double r, double im) : re(r), i(im) {
     j = k = 0;
 }
 
-Quaternion::Quaternion(float a, float b, float c, float d) : 
+Quaternion::Quaternion(double a, double b, double c, double d) : 
     re(a), i(b), j(c), k(d) {};
 
-Quaternion::Quaternion(const Quaternion& q2) :
-    re(q2.re), i(q2.i), j(q2.j), k(q2.k) {};
+ Quaternion::Quaternion(const Quaternion& q2) = default;
+ 
+Quaternion::Quaternion(Quaternion&& q) = default;
 
+Quaternion& Quaternion::operator= (const Quaternion& param) = default;
 
-Quaternion& Quaternion::operator= (const Quaternion& param) {
-	if (this != &param) {
-		re = param.re;
-		i = param.i;
-		j = param.j;
-		k = param.k;
-	}
-	return *this;
-}
+Quaternion& Quaternion::operator= (Quaternion&& param) = default;
 
 Quaternion Quaternion::operator+ () {
 	Quaternion result = *this;
@@ -66,9 +61,7 @@ Quaternion& Quaternion::operator*=(const Quaternion& param) {
 	return *this;
 }
 Quaternion Quaternion::operator+ (const Quaternion& param) {
-	Quaternion result = *this;
-	result += param;
-	return result;
+	return (*this) += param;
 }
 /*
 const MyClass MyClass::operator+(const MyClass &other) const {
@@ -86,27 +79,13 @@ Quaternion Quaternion::operator- (const Quaternion& param) {
 	result -= param;
 	return result;
 }
+
 Quaternion Quaternion::operator* (const Quaternion& param) {
 	Quaternion result = *this;
 	result *= param;
 	return result;
 }
-/*
-MyClass& MyClass::operator=(const MyClass &rhs) {
-	// 1.  Deallocate any memory that MyClass is using internally
-	// 2.  Allocate some memory to hold the contents of rhs
-	// 3.  Copy the values from rhs into this instance
-	// 4.  Return *this
-} 
-  MyClass& MyClass::operator=(const MyClass &rhs) {
-	  // Check for self-assignment!
-	  if (this == &rhs)      // Same object?
-		return *this;        // Yes, so skip assignment, and just return *this.
-	  // ... // Deallocate, allocate new space, copy values...
-	  return *this;
-}
-	  
-*/
+
 
 bool Quaternion::operator==(const Quaternion& q) const {
 	return ((re == q.re) && (i == q.i) && (j == q.j) && (k == q.k));
@@ -119,7 +98,45 @@ bool Quaternion::operator!=(const Quaternion& q) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const Quaternion& q) {
-	os << q.re << " + " << q.i << "i + " << q.j << "j + " << q.k << "k + " << std::endl;
+	os << q.re << " + " << q.i << "i + " << q.j << "j + " << q.k <<
+            "k + " << std::endl;
 	return os;
+}
+
+double Quaternion::R() const {
+    return re;
+}
+
+double Quaternion::I() const {
+    return i;
+}
+
+double Quaternion::J() const {
+    return j;
+}
+
+double Quaternion::K() const {
+    return k;
+}
+
+Quaternion Quaternion::conj() {
+    Quaternion result = *this;
+    result.i *= -1;
+    result.j *= -1;
+    result.k *= -1;
+    return result;
+}
+
+Quaternion conj(const Quaternion& q) {
+    Quaternion tmp = q;
+    return tmp.conj();
+}
+
+double Quaternion::norm() const {
+    return sqrt(re*re + i*i + j*j + k*k);
+}
+
+double norm(const Quaternion& q) {
+    return q.norm();
 }
 

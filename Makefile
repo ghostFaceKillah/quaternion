@@ -9,7 +9,7 @@ all: $(SOURCES) $(OBJECTS)
 $(OBJECTS): $(SOURCES) $(DEPS)
 	$(CC) $(CXXFLAGS) $<
 
-test: private/test.cpp
+test: test.cpp
 	$(CC) $(CXXFLAGS) $<
 
 
@@ -17,4 +17,4 @@ test: private/test.cpp
 .PHONY: clean
 
 clean:
-	rm *.o *.gch
+	rm *.o *~ *.*~

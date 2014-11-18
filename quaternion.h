@@ -1,76 +1,46 @@
 #include <ostream> 
 
 class Quaternion {
-        float re, i, j, k;
+        double re, i, j, k;
     public:
         // constructors
         Quaternion();
-        Quaternion(float re);
-        Quaternion(float re, float im);
-        Quaternion(float a, float b, float c, float d);
-        Quaternion(const Quaternion& q); 
-        // we need to look into how copying constructor is made
-        //  Quaternion q2(q1) - tworzy kopię kwaternionu q1;
-        //  Quaternion q2 = q1 - tworzy kopię kwaternionu q1;
+        Quaternion(double re);
+        Quaternion(double re, double im);
+        Quaternion(double a, double b, double c, double d);
+        Quaternion(const Quaternion& q);
+        Quaternion(Quaternion&& q); 
 
         // operators
         Quaternion operator+ ();
         Quaternion operator- ();
 
+        // consider adding static designator to following operators
         Quaternion& operator+=(const Quaternion& param);
         Quaternion& operator-=(const Quaternion& param);
         Quaternion& operator*=(const Quaternion& param);
-
         Quaternion operator+ (const Quaternion& param);
-        /*
-        const MyClass MyClass::operator+(const MyClass &other) const {
-            MyClass result = *this;     // Make a copy of myself.  Same as MyClass result(*this);
-            result += other;            // Use += to add other to the copy.
-            return result;              // All done!
-        }
-        const MyClass MyClass::operator+(const MyClass &other) const {
-            return MyClass(*this) += other;
-        }
-        */
-
         Quaternion operator- (const Quaternion& param);
         Quaternion operator* (const Quaternion& param);
-        Quaternion& operator= (const Quaternion& param);//dopisałam &, dlaczego bez?
-        /*
-        MyClass& MyClass::operator=(const MyClass &rhs) {
-            // 1.  Deallocate any memory that MyClass is using internally
-            // 2.  Allocate some memory to hold the contents of rhs
-            // 3.  Copy the values from rhs into this instance
-            // 4.  Return *this
-        } 
-          MyClass& MyClass::operator=(const MyClass &rhs) {
-              // Check for self-assignment!
-              if (this == &rhs)      // Same object?
-                return *this;        // Yes, so skip assignment, and just return *this.
-              // ... // Deallocate, allocate new space, copy values...
-              return *this;
-        }
-              
-        */
-
+        Quaternion& operator= (const Quaternion& param);
+        Quaternion& operator= (Quaternion&& param);
         bool operator==(const Quaternion& other) const;
-        /*
-        bool MyClass::operator==(const MyClass &other) const;
-        */
         bool operator!=(const Quaternion& other) const;
 
         friend std::ostream& operator<<(std::ostream& out, const Quaternion& q);
 
-        // setters getters
-        float R();
-        float I();
-        float J();
-        float K();
+        // getters
+        double R() const;
+        double I() const;
+        double J() const;
+        double K() const;
+        double norm() const;
         Quaternion conj();
-        Quaternion conj(Quaternion q);
-        float norm();
         // (norma a + bi + cj + dk to sqrt(a*a + b*b + c*c + d*d));
 };
+
+double norm(const Quaternion& q);
+Quaternion conj(const Quaternion& q);
 
 
 /* 
