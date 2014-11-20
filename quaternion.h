@@ -1,5 +1,8 @@
 #include<ostream> 
 #include<cmath>
+/* uWAGA
+ * Trzeba tutaj nieźle posprzątać. Jakość kodu jest racezej na smutno niż na wesoło
+ */
 
 class Quaternion {
     double re, i, j, k;
@@ -125,7 +128,7 @@ public:
         return sqrt(re*re + i*i + j*j + k*k);
     }
 
-    inline const Quaternion conj() const {
+    const Quaternion conj() const {
         return Quaternion (re, (-1)*i, (-1)*j, (-1)*k);
     }
 

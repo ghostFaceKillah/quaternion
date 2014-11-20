@@ -1,5 +1,5 @@
 CC = g++
-CXXFLAGS = -Wall -O2 -std=c++11 -c
+CXXFLAGS = -Wall -O2 -std=c++11
 SOURCES = quaternion.cpp
 DEPS = quaternion.h
 OBJECTS = $(SOURCES:.cpp=.o)
@@ -7,14 +7,14 @@ OBJECTS = $(SOURCES:.cpp=.o)
 all: $(SOURCES) $(OBJECTS)
 
 $(OBJECTS): $(SOURCES) $(DEPS)
-	$(CC) $(CXXFLAGS) $<
+	$(CC) $(CXXFLAGS) -c $<
 
-test: test.cpp
-	$(CC) $(CXXFLAGS) $<
+run_test: test.cpp
+	$(CC) $(CXXFLAGS) -o run_test $<
 
 
 
 .PHONY: clean
 
 clean:
-	rm *.o *~ *.*~
+	rm *.o *~ *.*~ run_test
