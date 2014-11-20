@@ -9,7 +9,7 @@ all: $(SOURCES) $(OBJECTS)
 $(OBJECTS): $(SOURCES) $(DEPS)
 	$(CC) $(CXXFLAGS) -c $<
 
-run_test: test.cpp
+run_test: test.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) -o run_test $<
 
 
