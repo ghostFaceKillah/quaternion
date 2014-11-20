@@ -12,7 +12,6 @@ public:
     Quaternion(double r, double im) : re(r), i(im), j(0), k(0) {};
     constexpr Quaternion(double a, double b, double c, double d) : 
         re(a), i(b), j(c), k(d) {};
-
     Quaternion(const Quaternion& q2) = default;
     Quaternion(Quaternion&& q) = default;
     Quaternion& operator= (const Quaternion& param) = default;
@@ -97,7 +96,7 @@ public:
 
 inline const Quaternion conj(const Quaternion& q) {
     return q.conj();
-}
+};
 
 inline double norm(const Quaternion& q) {
     return q.norm();
@@ -136,7 +135,7 @@ inline const Quaternion operator +
                         (const Quaternion& q1, const Quaternion& q2) {
     return Quaternion(q1.re+q2.re, q1.i+q2.i,
             q1.j+q2.j, q1.k+q2.k);
-}
+};
 
 inline Quaternion operator * (const Quaternion& q1, const Quaternion& q2) {
     return Quaternion(
@@ -145,11 +144,11 @@ inline Quaternion operator * (const Quaternion& q1, const Quaternion& q2) {
                q1.re*q2.j - q1.i*q2.k + q1.j*q2.re + q1.k*q2.i,
                q1.re*q2.k + q1.i*q2.j - q1.j*q2.i + q1.k*q2.re
            );
-}
+};
 
 inline bool operator == (double& x, const Quaternion& q) {
     return (q == Quaternion(x));
-}
+};
 
 std::ostream& operator << (std::ostream& os, const Quaternion& q) {
     if (q) {
@@ -162,9 +161,8 @@ std::ostream& operator << (std::ostream& os, const Quaternion& q) {
         if (q.k != 0) { os << q.k << "k"; }
     } else { os << "0"; }
     return os;
-}
+};
 
 constexpr Quaternion I{0, 1, 0, 0};
 constexpr Quaternion J{0, 0, 1, 0};
 constexpr Quaternion K{0, 0, 0, 1};
-
