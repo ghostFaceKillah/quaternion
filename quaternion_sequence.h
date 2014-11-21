@@ -11,6 +11,7 @@ public:
     typedef unsigned int size_type;
 
     QuaternionSequence();
+    ~QuaternionSequence();
     QuaternionSequence (
             const std::map<QuaternionSequence::size_type, Quaternion> &map);
     QuaternionSequence (
@@ -41,6 +42,8 @@ public:
             std::ostream& out, const QuaternionSequence &qs);
     friend const QuaternionSequence operator * (const QuaternionSequence &qs, const Quaternion &q);
     friend const QuaternionSequence operator * (const Quaternion &q, const QuaternionSequence &qs);
+    friend const QuaternionSequence operator * (const QuaternionSequence &qs, double q);
+    friend const QuaternionSequence operator * (double q, const QuaternionSequence &qs);
 private:
     std::map<size_type, Quaternion> data;
     static int n;

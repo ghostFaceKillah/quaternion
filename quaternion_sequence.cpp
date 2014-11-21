@@ -2,9 +2,14 @@
 #include <map>
 #include <vector>
 #include "quaternion_sequence.h"
+int QuaternionSequence::n = 0;
 
 QuaternionSequence::QuaternionSequence() {
     n++;
+}
+
+QuaternionSequence::~QuaternionSequence() {
+    n--;
 }
 
 QuaternionSequence::QuaternionSequence(const std::map<QuaternionSequence::size_type,
@@ -81,7 +86,6 @@ const QuaternionSequence QuaternionSequence::operator * (const QuaternionSequenc
     return QuaternionSequence(*this) *= qs;
 }
 
-//tutej skończyłem !!!! ważne 
 const QuaternionSequence operator * (const Quaternion& q, const QuaternionSequence& qs) {
     QuaternionSequence resu(qs);
     for (auto i : resu.data) {
@@ -102,6 +106,28 @@ const QuaternionSequence operator * (const QuaternionSequence& qs, const Quatern
     return resu;
 }
 
+
+const QuaternionSequence operator * (const QuaternionSequence &qs, double q) {
+    Quaternion d(q);
+    QuaternionSequence resu(qs);
+    for (auto i : resu.data) {
+        resu.data[i.first] = resu.data[i.first] * d;
+        if (!resu.data[i.first])
+            resu.data.erase(i.first);
+    }
+    return resu;
+
+}
+const QuaternionSequence operator * (double q, const QuaternionSequence &qs) {
+    Quaternion d(q);
+    QuaternionSequence resu(qs);
+    for (auto i : resu.data) {
+        resu.data[i.first] = d * resu.data[i.first];
+        if (!resu.data[i.first])
+            resu.data.erase(i.first);
+    }
+    return resu;
+}
 
 const Quaternion QuaternionSequence::operator[](const size_type i) const {
     auto iter = data.find(i);
