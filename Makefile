@@ -12,10 +12,10 @@ $(OBJECTS): $(SOURCES) $(DEPS)
 quat: test.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) -o quat_test $<
 
-seq: test2.cpp $(DEPS)
+seq: test2.cpp $(DEPS) $(OBJECTS)
 	$(CC) $(CXXFLAGS) $(OBJECTS) -o seq_test $<
 
-non: test3.cpp $(DEPS)
+non: test3.cpp $(DEPS) $(OBJECTS)
 	$(CC) $(CXXFLAGS) $<
 
 
