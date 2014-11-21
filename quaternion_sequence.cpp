@@ -7,19 +7,21 @@ QuaternionSequence::QuaternionSequence() {
     n++;
 }
 
-QuaternionSequence::QuaternionSequence(std::map<QuaternionSequence::size_type, Quaternion>&& q_map){
+QuaternionSequence::QuaternionSequence(const std::map<QuaternionSequence::size_type,
+        Quaternion>&& q_map){
     n++;
-    data = std::move(std::map<QuaternionSequence::size_type, Quaternion> map);
+    data = std::move(q_map);
 }
 
-QuaternionSequence::QuaternionSequence(std::map<QuaternionSequence::size_type, Quaternion>& q_map){
+QuaternionSequence::QuaternionSequence(const std::map<QuaternionSequence::size_type,
+        Quaternion>& map){
     n++;
-    data = std::map<QuaternionSequence::size_type, Quaternion> map;
+    data = std::map<QuaternionSequence::size_type, Quaternion>(map);
 }
 
-QuaternionSequence::QuaternionSequence(std::vector<Quaternion>& v){
+QuaternionSequence::QuaternionSequence(const std::vector<Quaternion>& v){
     n++;
-    for (int i = 0; i < q_vector.size(); ++i) {
+    for (int i = 0; i < v.size(); ++i) {
         if ((Quaternion) v[i])
             data[i] = v[i];
     }
@@ -27,7 +29,7 @@ QuaternionSequence::QuaternionSequence(std::vector<Quaternion>& v){
 
 QuaternionSequence::QuaternionSequence(const QuaternionSequence& qs) {
     n++;
-    data = std::map<QuaternionSequence::size_type, Quaternion> map(qs.data);
+    data = std::map<QuaternionSequence::size_type, Quaternion>(qs.data);
 }
 
 QuaternionSequence::QuaternionSequence(QuaternionSequence&& qs) = default;
@@ -47,7 +49,8 @@ QuaternionSequence& QuaternionSequence::operator +=(const QuaternionSequence& qs
     return *this;
 }
 
-QuaternionSequence QuaternionSequence::operator + (const QuaternionSequence& qs) {
+const QuaternionSequence QuaternionSequence::operator + 
+                                          (const QuaternionSequence& qs) const {
     return QuaternionSequence(*this) += qs;
 }
 
@@ -60,7 +63,8 @@ QuaternionSequence& QuaternionSequence::operator -= (const QuaternionSequence& q
     return *this;
 }
 
-QuaternionSequence QuaternionSequence::operator - (const QuaternionSequence& qs) {
+const QuaternionSequence QuaternionSequence::operator - (
+                                            const QuaternionSequence& qs) const{
     return QuaternionSequence(*this) -= qs;
 }
 
@@ -73,24 +77,31 @@ QuaternionSequence& QuaternionSequence::operator *= (const QuaternionSequence& q
     return *this;
 }
 
-QuaternionSequence operator * (const QuaternionSequence& qs) {
+const QuaternionSequence QuaternionSequence::operator * (const QuaternionSequence& qs) {
     return QuaternionSequence(*this) *= qs;
 }
 
 //tutej skończyłem !!!! ważne 
-QuaternionSequence operator * (const Quaternion& q, const QuaternionSequence& qs) {
-    for (auto i : qs.data) {
-        data[i.first] *= i.second;
-        if (!data[i.first])
-            data.erase(i.first);
+const QuaternionSequence operator * (const Quaternion& q, const QuaternionSequence& qs) {
+    QuaternionSequence resu(qs);
+    for (auto i : resu.data) {
+        resu.data[i.first] = q * resu.data[i.first];
+        if (!resu.data[i.first])
+            resu.data.erase(i.first);
     }
-    return *this;
-    return QuaternionSequence(*this) *= qs;
+    return resu;
 }
 
-QuaternionSequence operator * (const Quaternion& q, const QuaternionSequence& qs) {
-    return QuaternionSequence(*this) *= qs;
+const QuaternionSequence operator * (const QuaternionSequence& qs, const Quaternion& q ) {
+    QuaternionSequence resu(qs);
+    for (auto i : resu.data) {
+        resu.data[i.first] = resu.data[i.first] * q;
+        if (!resu.data[i.first])
+            resu.data.erase(i.first);
+    }
+    return resu;
 }
+
 
 const Quaternion QuaternionSequence::operator[](const size_type i) const {
     auto iter = data.find(i);
@@ -102,7 +113,7 @@ const Quaternion QuaternionSequence::operator[](const size_type i) const {
     }
 }
 
-void insert(const size_type& n, const Quaternion& q){
+void QuaternionSequence::insert(const size_type n, const Quaternion &q) {
     if (q)
         data[n] = q;
     else
@@ -130,15 +141,15 @@ QuaternionSequence::operator bool() const {
 
 std::ostream& operator << (std::ostream& os, const QuaternionSequence& qs) {
     os << std::string("(");
-    for (auto i : qs.data) {
+    for (auto i = qs.data.begin(); i != qs.data.end(); ++i) {
         if (i != qs.data.begin())
             os << ", ";
-        os << i.first << " -> " << i.second;
+        os << i->first << " -> " << i->second;
     }
     os << ")";
     return os;
 }
 
-int count(){
+int QuaternionSequence::count() {
     return n;
 }

@@ -7,9 +7,6 @@
 #include "quaternion.h"
 
 class QuaternionSequence {
-private:
-    std::map<size_type, Quaternion> data;
-    static int n;
 public:
     typedef unsigned int size_type;
 
@@ -31,6 +28,7 @@ public:
     const QuaternionSequence operator * (const Quaternion &q) const;
     QuaternionSequence& operator *= (const QuaternionSequence &qs);
     const QuaternionSequence operator * (const QuaternionSequence &qs);
+
     const Quaternion operator [] (const size_type i) const;
     void insert(const size_type n, const Quaternion &q);
     QuaternionSequence& operator = (const QuaternionSequence &qs);
@@ -41,9 +39,12 @@ public:
     static int count();
     friend std::ostream& operator << (
             std::ostream& out, const QuaternionSequence &qs);
+    friend const QuaternionSequence operator * (const QuaternionSequence &qs, const Quaternion &q);
+    friend const QuaternionSequence operator * (const Quaternion &q, const QuaternionSequence &qs);
+private:
+    std::map<size_type, Quaternion> data;
+    static int n;
 };
 
-const QuaternionSequence operator * (
-        const Quaternion& q, const QuaternionSequence& qs);
 
 #endif
