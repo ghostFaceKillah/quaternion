@@ -133,8 +133,7 @@ inline const Quaternion operator + (const double& k, const Quaternion& q) {
 
 inline const Quaternion operator + 
                         (const Quaternion& q1, const Quaternion& q2) {
-    return Quaternion(q1.re+q2.re, q1.i+q2.i,
-            q1.j+q2.j, q1.k+q2.k);
+    return Quaternion(q1.re+q2.re, q1.i+q2.i, q1.j+q2.j, q1.k+q2.k);
 };
 
 inline Quaternion operator * (const Quaternion& q1, const Quaternion& q2) {
