@@ -1,5 +1,5 @@
 #include "quaternion.h"
-// Quaternion q(1., 2., 3.); // błąd kompilacji 1
+Quaternion q(1., 2., 3.); // błąd kompilacji 1
 
 int main() {
   Quaternion q1, q2, q3;

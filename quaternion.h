@@ -36,7 +36,7 @@ public:
 
     friend std::ostream& operator << (std::ostream& os, const Quaternion& q) {
         if (q) {
-            os << q.re;
+            if (q.re !=0) { os << q.re; }
             if (q.i > 0) { os << "+"; }
             if (q.i != 0) { os << q.i << "i"; }
             if (q.j > 0) { os << "+"; }

@@ -9,13 +9,13 @@ all: $(SOURCES) $(OBJECTS)
 $(OBJECTS): $(SOURCES) $(DEPS)
 	$(CC) $(CXXFLAGS) -c $<
 
-quat_test: test.cpp $(DEPS)
+quat: test.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) -o quat_test $<
 
 seq: test2.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) $(OBJECTS) -o seq_test $<
 
-noncompile: test3.cpp $(DEPS)
+non: test3.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) $<
 
 
