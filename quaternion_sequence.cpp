@@ -1,198 +1,144 @@
+#include <iostream>
 #include <map>
 #include <vector>
-#include <iostream>
 #include "quaternion_sequence.h"
 
-int QuaternionSequence::how_many = 0;
-const std::string SEQUENCE_START = "(";
-const std::string SEQUENCE_END = ")";
-const std::string ARROW = " -> ";
-const std::string SEPARATOR = ", ";
-const int DO_USUNIECIA = 0;
-
-QuaternionSequence::QuaternionSequence()
-{
-    how_many++;
+QuaternionSequence::QuaternionSequence() {
+    n++;
 }
 
-QuaternionSequence::~QuaternionSequence()
-{
-    how_many--;
+QuaternionSequence::QuaternionSequence(std::map<QuaternionSequence::size_type, Quaternion>&& q_map){
+    n++;
+    data = std::move(std::map<QuaternionSequence::size_type, Quaternion> map);
 }
 
-QuaternionSequence::QuaternionSequence(const std::map<QuaternionSequence::size_type, Quaternion> &map)
-{
-    how_many++;
-    quaternions = std::map<QuaternionSequence::size_type, Quaternion>(map);
+QuaternionSequence::QuaternionSequence(std::map<QuaternionSequence::size_type, Quaternion>& q_map){
+    n++;
+    data = std::map<QuaternionSequence::size_type, Quaternion> map;
 }
 
-
-QuaternionSequence::QuaternionSequence(const std::vector<Quaternion> &v)
-{
-    how_many++;
-    int i = 0;
-    for (Quaternion quaternion : v)
-    {
-        if (quaternion)
-            quaternions[i] = quaternion;
-        i++;
+QuaternionSequence::QuaternionSequence(std::vector<Quaternion>& v){
+    n++;
+    for (int i = 0; i < q_vector.size(); ++i) {
+        if ((Quaternion) v[i])
+            data[i] = v[i];
     }
 }
 
-
-QuaternionSequence::QuaternionSequence(const QuaternionSequence &qs)
-{
-    how_many++;
-    quaternions = std::map<QuaternionSequence::size_type, Quaternion>(qs.quaternions);
+QuaternionSequence::QuaternionSequence(const QuaternionSequence& qs) {
+    n++;
+    data = std::map<QuaternionSequence::size_type, Quaternion> map(qs.data);
 }
 
-QuaternionSequence::QuaternionSequence (QuaternionSequence &&qs) : quaternions(std::move(qs.quaternions)){
-    how_many++;
-}
+QuaternionSequence::QuaternionSequence(QuaternionSequence&& qs) = default;
 
-
-QuaternionSequence& QuaternionSequence::operator=(const QuaternionSequence &qs1)
-{
-   quaternions = qs1.quaternions;
-   return *this;
-};
-
-QuaternionSequence& QuaternionSequence::operator=(QuaternionSequence &&qs){
-    quaternions = std::move(qs.quaternions);
+QuaternionSequence& QuaternionSequence::operator = (const QuaternionSequence& qs) {
+    data = qs.data;
     return *this;
 }
+QuaternionSequence& QuaternionSequence::operator = (QuaternionSequence&& qs) = default;
 
-
-QuaternionSequence& QuaternionSequence::operator+=(const QuaternionSequence &qs)
-{
-    for (auto iterator : qs.quaternions)
-    {
-        quaternions[iterator.first] += iterator.second;
-        /* usuwam niepotrzebne (zerowe) kwaterniony */
-        if (!quaternions[iterator.first])
-        {
-            quaternions.erase(iterator.first);
-        }
+QuaternionSequence& QuaternionSequence::operator +=(const QuaternionSequence& qs) {
+    for (auto i : qs.data) {
+        data[i.first] += i.second;
+        if (!data[i.first])
+            data.erase(i.first);
     }
     return *this;
 }
 
-const QuaternionSequence QuaternionSequence::operator+(const QuaternionSequence &qs) const{
+QuaternionSequence QuaternionSequence::operator + (const QuaternionSequence& qs) {
     return QuaternionSequence(*this) += qs;
 }
 
-QuaternionSequence& QuaternionSequence::operator-=(const QuaternionSequence &qs)
-{
-    for (auto iterator : qs.quaternions)
-    {
-        quaternions[iterator.first] -= iterator.second;
-        /* usuwam niepotrzebne (zerowe) kwaterniony */
-        if (!quaternions[iterator.first]) {
-            quaternions.erase(iterator.first);
-        }
+QuaternionSequence& QuaternionSequence::operator -= (const QuaternionSequence& qs) {
+    for (auto i : qs.data) {
+        data[i.first] -= i.second;
+        if (!data[i.first])
+            data.erase(i.first);
     }
     return *this;
 }
 
-const QuaternionSequence QuaternionSequence::operator-(const QuaternionSequence &qs) const{
+QuaternionSequence QuaternionSequence::operator - (const QuaternionSequence& qs) {
     return QuaternionSequence(*this) -= qs;
 }
 
-QuaternionSequence& QuaternionSequence::operator*=(const Quaternion &q)
-{
-    for (auto iterator : this->quaternions)
-    {
-        quaternions[iterator.first] *= q;
-        if (!quaternions[iterator.first])
-            quaternions.erase(iterator.first);
+QuaternionSequence& QuaternionSequence::operator *= (const QuaternionSequence& qs) {
+    for (auto i : qs.data) {
+        data[i.first] *= i.second;
+        if (!data[i.first])
+            data.erase(i.first);
     }
-    return (*this);
+    return *this;
 }
 
-const QuaternionSequence QuaternionSequence::operator*(const Quaternion &q) const{
-    return QuaternionSequence(*this) *= q;
+QuaternionSequence operator * (const QuaternionSequence& qs) {
+    return QuaternionSequence(*this) *= qs;
 }
 
-QuaternionSequence& QuaternionSequence::operator*=(const QuaternionSequence &qs)
-{
-    for (auto it = quaternions.begin(); it != quaternions.end();){
-            auto tmp = *it;
-            it ++;
-            insert(tmp.first, tmp.second * qs[tmp.first]);
-        }
-        return *this;
+//tutej skończyłem !!!! ważne 
+QuaternionSequence operator * (const Quaternion& q, const QuaternionSequence& qs) {
+    for (auto i : qs.data) {
+        data[i.first] *= i.second;
+        if (!data[i.first])
+            data.erase(i.first);
+    }
+    return *this;
+    return QuaternionSequence(*this) *= qs;
 }
 
-const QuaternionSequence QuaternionSequence::operator*(const QuaternionSequence &qs)
-{
-    return(QuaternionSequence(*this) *= qs);
+QuaternionSequence operator * (const Quaternion& q, const QuaternionSequence& qs) {
+    return QuaternionSequence(*this) *= qs;
 }
 
-const Quaternion QuaternionSequence::operator[](const size_type i) const{
-    auto iterator = quaternions.find(i);
-    if (iterator == quaternions.end())
-    {
+const Quaternion QuaternionSequence::operator[](const size_type i) const {
+    auto iter = data.find(i);
+    if (iter == data.end()) {
         return Quaternion();
     }
-    else
-    {
-        return iterator->second;
+    else {
+        return iter->second;
     }
 }
 
-void QuaternionSequence::insert(const size_type n, const Quaternion &q)
-{
+void insert(const size_type& n, const Quaternion& q){
     if (q)
-        quaternions[n] = q;
+        data[n] = q;
     else
-        quaternions.erase(n);
+        data.erase(n);
 }
 
-bool QuaternionSequence::operator==(QuaternionSequence const &qs) const{
-    if (this->quaternions.size() != qs.quaternions.size())
-        return false;
-    auto iterator = qs.quaternions.begin();
-    for (auto quaternion : this->quaternions)
+bool QuaternionSequence::operator == (const QuaternionSequence& qs) const {
+    auto iter = qs.data.begin();
+    for (auto quaternion : data)
     {
-        if (*iterator != quaternion)
+        if (*iter != quaternion)
             return false;
-        iterator++;
+        iter++;
     }
     return true;
 }
 
-bool QuaternionSequence::operator!=(QuaternionSequence const &qs) const{
-    return !operator==(qs);
+bool QuaternionSequence::operator != (const QuaternionSequence& qs) const {
+    return !((*this) == qs);
 }
 
-QuaternionSequence::operator bool() const
-{
-    return quaternions.size() > 0;
+QuaternionSequence::operator bool() const {
+    return n > 0;
 }
 
-int QuaternionSequence::count()
-{
-    return how_many;
-}
-
-std::ostream& operator<<(std::ostream& out, const QuaternionSequence &qs)
-{
-    bool is_first = true;
-    out << SEQUENCE_START;
-    for (auto iterator : qs.quaternions)
-    {
-        if (is_first)
-            is_first = false;
-        else
-            out << SEPARATOR;
-        out << iterator.first << ARROW << iterator.second;
+std::ostream& operator << (std::ostream& os, const QuaternionSequence& qs) {
+    os << std::string("(");
+    for (auto i : qs.data) {
+        if (i != qs.data.begin())
+            os << ", ";
+        os << i.first << " -> " << i.second;
     }
-    out << SEQUENCE_END;
-    return out;
+    os << ")";
+    return os;
 }
 
-const QuaternionSequence operator*(const Quaternion& q, const QuaternionSequence& qs){
-    return qs * q;
+int count(){
+    return n;
 }
-
-
