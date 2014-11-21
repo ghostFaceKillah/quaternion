@@ -15,7 +15,7 @@ private:
     static int how_many;
 public:
 
-    QuaternionSequence ();
+    QuaternionSequence();
 
     ~QuaternionSequence();
 
@@ -24,10 +24,10 @@ public:
     QuaternionSequence(const std::vector<Quaternion> &v);
 
     QuaternionSequence (const QuaternionSequence &qs);
-        QuaternionSequence (QuaternionSequence&& qs);
+    QuaternionSequence (QuaternionSequence&& qs);
 
     QuaternionSequence& operator=(const QuaternionSequence &qs1);
-        QuaternionSequence& operator=(QuaternionSequence &&qs);
+    QuaternionSequence& operator=(QuaternionSequence &&qs);
 
     QuaternionSequence& operator+=(const QuaternionSequence &qs);
 

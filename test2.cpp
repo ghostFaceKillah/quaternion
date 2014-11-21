@@ -69,6 +69,9 @@ int main() {
         assert(qs1 - qs1 == qs0);
         assert(qs1 + -1 * qs1 == qs0);
         assert(qs1 + qs1 * (-1) == qs0);
+        std::cout << qs0 << std::endl;
+        std::cout << qs1 << std::endl;
+        std::cout << qs1 * 0 << std::endl;
         assert(qs1 * 0 == qs0);
         assert(0 * qs1 == qs0);
         assert(qs1 * 1 == qs1);

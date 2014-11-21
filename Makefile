@@ -9,17 +9,17 @@ all: $(SOURCES) $(OBJECTS)
 $(OBJECTS): $(SOURCES) $(DEPS)
 	$(CC) $(CXXFLAGS) -c $<
 
-run_test: test.cpp $(DEPS)
-	$(CC) $(CXXFLAGS) -o run_test $<
+quat_test: test.cpp $(DEPS)
+	$(CC) $(CXXFLAGS) -o quat_test $<
 
-test: test2.cpp $(DEPS)
-	$(CC) $(CXXFLAGS) $(OBJECTS) $<
+seq: test2.cpp $(DEPS)
+	$(CC) $(CXXFLAGS) $(OBJECTS) -o seq_test $<
 
-test3: test3.cpp $(DEPS)
+noncompile: test3.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) $<
 
 
 .PHONY: clean
 
 clean:
-	rm *.o *~ *.*~ run_test
+	rm *.o *~ *.*~ quat_test seq_test test

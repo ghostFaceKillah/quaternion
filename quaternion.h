@@ -1,3 +1,6 @@
+#ifndef QUATERNION_H
+#define QUATERNION_H
+
 #include<ostream> 
 #include<cmath>
 // BEWARE 
@@ -30,7 +33,19 @@ public:
     friend const Quaternion operator +
         (const Quaternion & q1, const Quaternion & q2);
     friend Quaternion operator * (const Quaternion& q1, const Quaternion& q2);
-    friend std::ostream& operator << (std::ostream& os, const Quaternion& q);
+
+    friend std::ostream& operator << (std::ostream& os, const Quaternion& q) {
+        if (q) {
+            os << q.re;
+            if (q.i > 0) { os << "+"; }
+            if (q.i != 0) { os << q.i << "i"; }
+            if (q.j > 0) { os << "+"; }
+            if (q.j != 0) { os << q.j << "j"; }
+            if (q.k > 0) { os << "+"; }
+            if (q.k != 0) { os << q.k << "k"; }
+        } else { os << "0"; }
+        return os;
+    }
 
     const Quaternion& operator += (const Quaternion& param) {
         re += param.re;
@@ -149,19 +164,8 @@ inline bool operator == (double& x, const Quaternion& q) {
     return (q == Quaternion(x));
 };
 
-std::ostream& operator << (std::ostream& os, const Quaternion& q) {
-    if (q) {
-        os << q.re;
-        if (q.i > 0) { os << "+"; }
-        if (q.i != 0) { os << q.i << "i"; }
-        if (q.j > 0) { os << "+"; }
-        if (q.j != 0) { os << q.j << "j"; }
-        if (q.k > 0) { os << "+"; }
-        if (q.k != 0) { os << q.k << "k"; }
-    } else { os << "0"; }
-    return os;
-};
-
 constexpr Quaternion I{0, 1, 0, 0};
 constexpr Quaternion J{0, 0, 1, 0};
 constexpr Quaternion K{0, 0, 0, 1};
+
+#endif
