@@ -108,14 +108,10 @@ const QuaternionSequence operator * (const QuaternionSequence& qs, const Quatern
 
 
 const QuaternionSequence operator * (const QuaternionSequence &qs, double q) {
-    std::cout << "getting called hehehehe" << std::endl;
-
     Quaternion d(q);
-    std::cout << "argument is " << d << std::endl;
     QuaternionSequence resu(qs);
     for (auto i : resu.data) {
         resu.data[i.first] = resu.data[i.first] * d;
-        std::cout << "wynik kurwa  is " << resu.data[i.first] << std::endl;
         if (!resu.data[i.first])
             resu.data.erase(i.first);
     }
