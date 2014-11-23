@@ -35,14 +35,15 @@ public:
     friend Quaternion operator * (const Quaternion& q1, const Quaternion& q2);
 
     friend std::ostream& operator << (std::ostream& os, const Quaternion& q) {
+		bool first = false;
         if (q) {
-            if (q.re !=0) { os << q.re; }
-            if (q.i > 0) { os << "+"; }
-            if (q.i != 0) { os << q.i << "i"; }
-            if (q.j > 0) { os << "+"; }
-            if (q.j != 0) { os << q.j << "j"; }
-            if (q.k > 0) { os << "+"; }
-            if (q.k != 0) { os << q.k << "k"; }
+            if (q.re != 0) { os << q.re; first = true; }
+			if ((q.i > 0) && first) { os << "+"; }
+			if (q.i != 0) { os << q.i << "i"; first = true; }
+			if ((q.j > 0) && first) { os << "+"; }
+			if (q.j != 0) { os << q.j << "j"; first = true; }
+			if ((q.k > 0) && first) { os << "+"; }
+			if (q.k != 0) { os << q.k << "k"; }
         } else { os << "0"; }
         return os;
     }

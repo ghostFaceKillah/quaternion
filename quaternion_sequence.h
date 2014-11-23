@@ -46,7 +46,7 @@ public:
     friend const QuaternionSequence operator * (double q, const QuaternionSequence &qs);
 private:
     std::map<size_type, Quaternion> data;
-    static int n;
+    static int qs_number;
 };
 
 
